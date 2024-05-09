@@ -1,0 +1,24 @@
+<script 
+    src="https://cdn.jsdelivr.net/npm/css-doodle@0.39.1/css-doodle.min.js">
+</script>
+
+<css-doodle class="w-full h-full bg-Vbg absolute" click-to-update>
+    {`
+        @grid: 40 / 80%;
+        @random {
+            border-left: 1px solid #5d81bc;
+        }
+        @random {
+            border-top: 1px solid #5d81bc;
+        }
+        @random(.25) {
+            background: linear-gradient(@p(#fff, tan, #5d81bc), @lp
+        )
+        50% / @r(60%) @lr
+        no-repeat;
+        }
+        @random {
+            filter: drop-shadow(0 0 10px #fff);
+        }
+    `}
+</css-doodle>

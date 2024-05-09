@@ -4,8 +4,9 @@ export default {
 	theme: {
 		extend: {
 			colors: {
-				"Bblue": "#300C6A",
-				"Bheader": "#0A97C3"
+				"Vblue": "#300C6A",
+				"Vheader": "#0A97C3",
+				"Vbg": "#141630"
 			},
 			fontFamily: {
 				inter: ["Inter Variable", "sans-serif"]
