@@ -4,21 +4,19 @@ import {PlatformApplication} from "@tsed/common";
 import "@tsed/platform-express"; // /!\ keep this import
 import "@tsed/ajv";
 import {config} from "./config/index";
-import * as rest from "./controllers/rest/index";
+import { GptController } from "./controllers/GptController";
 
 @Configuration({
   ...config,
   acceptMimes: ["application/json"],
-  httpPort: process.env.PORT || 8083,
+  httpPort: 8083,
   httpsPort: false, // CHANGE
   disableComponentsScan: true,
   ajv: {
     returnsCoercedValues: true
   },
   mount: {
-    "/rest": [
-      ...Object.values(rest)
-    ]
+    "/": [GptController]
   },
   middlewares: [
     "cors",

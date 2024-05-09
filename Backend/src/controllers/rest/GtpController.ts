@@ -1,8 +1,8 @@
 import {Controller} from "@tsed/di";
 import {Get} from "@tsed/schema";
 
-@Controller("/hello-world")
-export class HelloWorldController {
+@Controller("/gtp")
+export class GtpController {
   @Get("/")
   get() {
     return "hello";
