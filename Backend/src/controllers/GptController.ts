@@ -3,7 +3,7 @@ import {Get} from "@tsed/schema";
 import { QueryParams } from "@tsed/common"
 import OpenAI from "openai";
 
-const openai = new OpenAI(process.env.OPEN_AI_API_KEY || "default api key");
+const openai = new OpenAI();
 @Controller("/gpt")
 export class GptController {
   
@@ -24,8 +24,8 @@ export class GptController {
               {
                 type: "image_url",
                 image_url: {
-                  "url": imageUrl,
-                  "detail": "low"
+                  url: imageUrl,
+                  detail: "low"
                 },
               },
             ],
@@ -33,7 +33,7 @@ export class GptController {
         ],
       });
       
-      return response.choices[0].text; // return the generated text
+      return response.choices[0]; // return the generated text
     } catch (error) {
       // Handle errors here
       console.error("Error calling OpenAI API:", error);
