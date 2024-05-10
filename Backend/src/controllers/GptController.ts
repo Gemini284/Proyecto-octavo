@@ -3,7 +3,7 @@ import {Get} from "@tsed/schema";
 import { QueryParams } from "@tsed/common"
 import OpenAI from "openai";
 
-const openai = new OpenAI(process.env.OPEN AI_API_KEY || "default api key");
+const openai = new OpenAI(process.env.OPEN_AI_API_KEY || "default api key");
 @Controller("/gpt")
 export class GptController {
   
