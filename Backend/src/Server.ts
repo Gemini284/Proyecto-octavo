@@ -4,7 +4,9 @@ import {PlatformApplication} from "@tsed/common";
 import "@tsed/platform-express"; // /!\ keep this import
 import "@tsed/ajv";
 import {config} from "./config/index";
+
 import AnalizeCtrl from "./controllers/rest/AnalizeCtrl";
+import Screenshot from "./services/Screenshot";
 
 @Configuration({
   ...config,

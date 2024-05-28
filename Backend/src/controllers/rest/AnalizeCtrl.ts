@@ -1,11 +1,14 @@
-import { Post, Get } from "@tsed/schema";
+import { BodyParams } from "@tsed/platform-params";
 import { Controller } from "@tsed/di";
+import { Post } from "@tsed/schema";
+import Screenshot from "src/services/Screenshot";
 
 @Controller("/Analize")
 class AnalizeCtrl {
-    @Get()
-    hello(): string {
-        return "HOLA DESDE ANALIZE";
+    @Post()
+    Analize(@BodyParams() url: string): string {
+        
+        return url;
     }
 };
 
