@@ -4,7 +4,7 @@ import {PlatformApplication} from "@tsed/common";
 import "@tsed/platform-express"; // /!\ keep this import
 import "@tsed/ajv";
 import {config} from "./config/index";
-import { GptController } from "./controllers/GptController";
+import AnalizeCtrl from "./controllers/rest/AnalizeCtrl";
 
 @Configuration({
   ...config,
@@ -16,7 +16,7 @@ import { GptController } from "./controllers/GptController";
     returnsCoercedValues: true
   },
   mount: {
-    "/": [GptController]
+    "/": [AnalizeCtrl]
   },
   middlewares: [
     "cors",
