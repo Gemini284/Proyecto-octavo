@@ -4,10 +4,11 @@ import type { Browser, Page } from "puppeteer";
 
 @Service()
 class Screenshot {
-    async screenshot(url: string): Promise<Buffer> {
+    async screenshot(uwu: string): Promise<Buffer> {
+        // console.log("||", uwu, "||");
         const browser: Browser = await puppeteer.launch();
         const page: Page = await browser.newPage();
-        await page.goto("https://www.stackoverflow.com", { waitUntil: "networkidle2", timeout: 0});
+        await page.goto(uwu, { waitUntil: "networkidle2", timeout: 0});
         const SS: Buffer = await page.screenshot();
         await browser.close();
 
