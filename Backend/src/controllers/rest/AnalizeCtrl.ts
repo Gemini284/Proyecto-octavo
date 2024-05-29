@@ -1,14 +1,24 @@
-import { BodyParams } from "@tsed/platform-params";
+import { HeaderParams } from "@tsed/platform-params";
 import { Controller } from "@tsed/di";
 import { Post } from "@tsed/schema";
-import Screenshot from "src/services/Screenshot";
+
+import { spawn } from "child_process";
+
+import Screenshot from "../../services/Screenshot";
 
 @Controller("/Analize")
 class AnalizeCtrl {
+    constructor(private screenshotService: Screenshot) {};
+
     @Post()
-    Analize(@BodyParams() url: string): string {
-        
-        return url;
+    async Analize(@HeaderParams() url: string): Promise<Buffer> {
+        try{
+            const screenshot = await this.screenshotService.screenshot(url);
+
+            return screenshot;
+        }catch(error){
+            throw new Error(error);
+        }
     }
 };
 
