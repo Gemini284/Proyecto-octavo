@@ -1,49 +1,105 @@
-<div class="small-form">
-    <form class="wrapper" action="">
-        <h2>Favor de insertar el link para el análisis</h2>
-        <input type="url" placeholder="Url" required class="input">
-        <button class="button">Submit</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Display Form</title>
+  <style>
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 300px;
+      margin: 80px auto 0;
+      background: transparent;
+      border: 2px solid rgba(0, 0, 0, 0.2);
+      padding: 30px 40px;
+      border-radius: 10px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      color: #78CAD5;
+      font-size: 1.5em;
+    }
+
+    .button {
+      background-color: hsl(278, 77%, 74%, .2);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 20px;
+      padding: 10px 20px;
+    }
+
+    .input {
+      border: 1px solid black;
+      border-radius: 100px;
+      text-align: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+      width: 95%;
+    }
+
+    .image-container {
+      display: flex; /* Enable Flexbox */
+      flex-direction: column; /* Arrange items vertically */
+      align-items: center; /* Center items horizontally */
+      justify-content: center; /* Center items vertically */
+      margin-top: 500px; /* Adjust margin as needed */
+      text-align: center;
+    }
+
+    .image-container img {
+      max-width: 50%; /* Ensure image doesn't overflow container */
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="small-form">
+    <form class="wrapper" id="imageForm">
+      <h2>Favor de insertar el link para el análisis</h2>
+      <input type="url" placeholder="Url" required class="input" id="imageUrl">
+      <button class="button" type="submit">Submit</button>
     </form>
-</div>
+    <div class="image-container" id="imageContainer"></div>
+  </div>
 
-<style scoped>
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 300px; /* Ancho del formulario */
-    height: 300px; /* Alto del formulario */
-    margin: 80px auto 0; /* Margen superior ajustado a 80px */
-    background: transparent;
-    border: 2px solid rgba(0, 0, 0, 0.2);
-    padding: 30px 40px;
-    border-radius: 10px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
+  <script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  const imageForm = document.getElementById('imageForm') as HTMLFormElement;
+  const imageUrlInput = document.getElementById('imageUrl') as HTMLInputElement;
+  const imageContainer = document.getElementById('imageContainer');
 
-h2 {
-    color: #78CAD5;
-    font-size: 1.5em;
-}
+  if (imageForm && imageUrlInput && imageContainer) {
+    imageForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
 
-.button {
-    background-color: hsl(278, 77%, 74%, .2);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    margin-top: 20px;
-    padding: 10px 20px;
-}
+      const imageUrl = imageUrlInput.value;
 
-.input {
-    border: 1px solid black;
-    border-radius: 100px;
-    text-align: center;
-    margin-bottom: 20px;
-    margin-top: 20px;
-    width: 95%;
-}
+      // Check if an image is already displayed
+      if (imageContainer.firstChild) {
+        // If an image exists, remove it
+        imageContainer.removeChild(imageContainer.firstChild);
+      }
 
-</style>
+      // Create the new image element
+      const imageElement = document.createElement('img');
+      imageElement.src = imageUrl;
+      imageElement.alt = "Submitted Image";
+
+      // Set the image size (optional)
+      imageElement.style.width = '500px'; // Adjust width as needed
+      imageElement.style.height = '900px'; // Adjust height as needed
+
+      // Append the new image to the container
+      imageContainer.appendChild(imageElement);
+    });
+  }
+});
+  </script>
+</body>
+</html>
