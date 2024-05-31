@@ -3,6 +3,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 import cv2
 import sys
+import io
 
 def get_img_array(img_path, size):
     """Preprocess the image to get it ready for prediction"""
@@ -45,8 +46,10 @@ def save_and_display_gradcam(img_path, heatmap, cam_path, prediction, alpha=0.4)
     label = f'Predicted Rating: {prediction:.2f}'
     cv2.putText(superimposed_img, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    cv2.imwrite(cam_path, superimposed_img)
-    return superimposed_img
+    # Save the image to a buffer instead of a file
+    is_success, buffer = cv2.imencode(".png", superimposed_img)
+    io_buf = io.BytesIO(buffer)
+    return io_buf
 
 def main(img_path):
     model_path = 'pretrained_model.h5'
@@ -56,13 +59,19 @@ def main(img_path):
     img_array = get_img_array(img_path, (192, 256))
     heatmap, prediction = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
 
-    cam_path = 'gradcam_result.png'
-    superimposed_img = save_and_display_gradcam(img_path, heatmap, cam_path, prediction)
+    cam_path = 'gradcam_prueba_result.png'
+    buffer = save_and_display_gradcam(img_path, heatmap, cam_path, prediction)
 
-    # Display the image
-    superimposed_img = cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB  
+    # Display the image from the buffer
+    buffer.seek(0)
+    img = plt.imread(buffer, format='png')
     
-    return superimposed_img, prediction # Return the superimposed image as a numpy array and the prediction as a float
+    plt.imshow(img)
+    plt.axis('off')
+    plt.title('Website aesthetic prediction score: {:.2f}'.format(prediction))
+    plt.show()
+    print(buffer.getvalue())
+    return buffer # Return the buffer
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
