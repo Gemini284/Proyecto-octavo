@@ -17,9 +17,9 @@ Para ejecutar el script, utiliza el siguiente comando en tu terminal:
 
 Ejemplo
 
-python ./gradcam.py ./example.png
+    python ./gradcam.py ./example.png
 
-Detalles del script
+## Detalles del script
 
 El script gradcam.py realiza los siguientes pasos:
 
@@ -29,15 +29,15 @@ El script gradcam.py realiza los siguientes pasos:
 * Superposición del mapa de calor: El mapa de calor se superpone a la imagen original, y se guarda la imagen resultante con el nombre gradcam_result.png.
 * Etiquetado de la imagen: Se añade la puntuación predicha como una etiqueta en la imagen resultante.
 
-Parámetros de entrada
+#### Parámetros de entrada
 
 * img_path: La ruta a la imagen para la cual se desea generar la visualización Grad-CAM.
 
-Salidas
+#### Salidas
 
 * img_path: La ruta a la imagen para la cual se desea generar la visualización Grad-CAM.
 
-Ejemplo de salida
+#### Ejemplo de salida
 
 * El script guardará la imagen resultante en el archivo gradcam_result.png en el directorio de trabajo actual. Además, la puntuación predicha se mostrará como una etiqueta en la imagen.
 
