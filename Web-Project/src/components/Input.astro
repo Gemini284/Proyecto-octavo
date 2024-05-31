@@ -78,7 +78,7 @@
                     const imageUrl = imageUrlInput.value;
 
                     try {
-                        const response = await fetch('http://localhost:3000/analyze', {
+                        const response = await fetch(`${window.location.origin}/analyze`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
