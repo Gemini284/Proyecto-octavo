@@ -31,7 +31,9 @@ El script gradcam.py realiza los siguientes pasos:
 
 #### Parámetros de entrada
 
+* model_path: La ruta donde se encuentra el modelo preentrenado de keras para hacer la predicción del score
 * img_path: La ruta a la imagen para la cual se desea generar la visualización Grad-CAM.
+* gradcam_result_path: La ruta de la imagen con los resultados de la visualización Grad-cam.
 
 #### Salidas
 
