@@ -38,12 +38,19 @@ class AnalizeCtrl {
             console.log(IMAGE_PATH)
             console.log(SCRIPT_PATH)
 
+            // Manage child process's events
             let hasCriticalError: boolean = false;
             const responseBuff: Buffer[] = [];
+
             const bufferDataPromise: Promise<Buffer> = new Promise<Buffer>((resolve, reject) => {
+                PYTHON_PROCESS.on("spawn", () => console.log(
+                    "Python process spawned",                           "\n", 
+                    "Spawned process: ", PYTHON_PROCESS.spawnfile,      "\n",
+                    "Process's args: ", PYTHON_PROCESS.spawnargs,       "\n"
+                ));
                 PYTHON_PROCESS.stdout.on("data", resBuffer => {
                     console.log("Received data chunk from Python script: ", resBuffer);
-                    responseBuff.push(resBuffer)
+                    responseBuff.push(resBuffer);
                 });
                 PYTHON_PROCESS.stdout.on("end", async() => {
                     if(hasCriticalError){

@@ -56,7 +56,7 @@ def main(img_path):
     img_array = get_img_array(img_path, (192, 256))
     heatmap, prediction = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
 
-    cam_path = 'gradcam_result.png'
+    cam_path = 'C:\\Users\\vicen\\source\\repos\\Proyecto-octavo\\Backend\\src\\temp\\gradcam_result.png'
     superimposed_img = save_and_display_gradcam(img_path, heatmap, cam_path, prediction)
 
     # Display the image
