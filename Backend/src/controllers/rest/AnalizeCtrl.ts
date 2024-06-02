@@ -17,6 +17,7 @@ interface Page {
 
 const writeFile = util.promisify(fs.writeFile);
 const unlink = util.promisify(fs.unlink);
+const readFile = util.promisify(fs.readFile);
 
 @Controller("/Analize")
 class AnalizeCtrl {
@@ -29,45 +30,44 @@ class AnalizeCtrl {
             const { url } = page;
             const screenshot: Buffer = await this.screenshotService.screenshot(url);
 
+            const MODEL_PATH: string = path.resolve(__dirname, "..\\..\\scripts\\pretrained_model.h5");
+            const GRADCAM_RESULT_PATH: string = path.resolve(__dirname, "..\\..\\temp\\gradcamRes.png");
             const IMAGE_PATH: string = path.resolve(__dirname, "..\\..\\temp\\temp.png");
             await writeFile(IMAGE_PATH, screenshot);
 
             // Create child process
             const SCRIPT_PATH: string = path.resolve(__dirname, "..\\..\\scripts\\gradcam.py");
-            const PYTHON_PROCESS = spawn("python3", [SCRIPT_PATH, IMAGE_PATH]);
-            console.log(IMAGE_PATH)
-            console.log(SCRIPT_PATH)
-
+            const PYTHON_PROCESS = spawn("python3", [SCRIPT_PATH, MODEL_PATH, IMAGE_PATH, GRADCAM_RESULT_PATH]);
+            
             // Manage child process's events
             let hasCriticalError: boolean = false;
-            const responseBuff: Buffer[] = [];
-
             const bufferDataPromise: Promise<Buffer> = new Promise<Buffer>((resolve, reject) => {
                 PYTHON_PROCESS.on("spawn", () => console.log(
                     "Python process spawned",                           "\n", 
                     "Spawned process: ", PYTHON_PROCESS.spawnfile,      "\n",
                     "Process's args: ", PYTHON_PROCESS.spawnargs,       "\n"
                 ));
-                PYTHON_PROCESS.stdout.on("data", resBuffer => {
-                    console.log("Received data chunk from Python script: ", resBuffer);
-                    responseBuff.push(resBuffer);
-                });
                 PYTHON_PROCESS.stdout.on("end", async() => {
                     if(hasCriticalError){
                         reject(new Error("Critical error in Python script."));
                         return;
                     }
 
-                    const RESULT_PNG: Buffer = Buffer.concat(responseBuff);
-                    console.log("Buffer Lenght: ", RESULT_PNG.length);
-                    resolve(RESULT_PNG);
-
-                    // try {
-                    //     await unlink(IMAGE_PATH);
-                    //     console.log("Image deleted successfully");
-                    // } catch (error) {
-                    //     console.error("Error deleting image: ", error);
-                    // }
+                    try{
+                        const resultBuffer: Buffer = await readFile(GRADCAM_RESULT_PATH);
+                        resolve(resultBuffer);
+                    }catch(error){
+                        reject(error);
+                    }finally{
+                        // Delete images
+                        try{
+                            await unlink(IMAGE_PATH);
+                            await unlink(GRADCAM_RESULT_PATH);
+                            console.log("Images deleted successfully");
+                        }catch(error){
+                            console.error("Error deleting image: ", error);
+                        }
+                    }
                 });
 
                 // Handle errors
@@ -75,9 +75,9 @@ class AnalizeCtrl {
                 PYTHON_PROCESS.stderr.on("data", data => {
                     const errorMessage: string = data?.toString();
                     if(errorMessage.toLowerCase().includes("warning")){
-                        console.warn("Python Warning: ", ++count, " ", errorMessage);
+                        console.warn("Python Warning:", ++count, errorMessage);
                     }else{
-                        console.error("Error executing Python: ", ++count, " ", errorMessage);
+                        console.error("Error executing Python:", ++count, errorMessage);
                         hasCriticalError = true;
                     }
                 });
