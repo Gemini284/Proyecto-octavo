@@ -49,7 +49,7 @@ def save_and_display_gradcam(img_path, heatmap, cam_path, prediction, alpha=0.4)
     return superimposed_img
 
 def main(img_path):
-    model_path = 'pretrained_model.h5'
+    model_path = 'C:\\Users\\vicen\\source\\repos\\Proyecto-octavo\\Backend\\src\\scripts\\pretrained_model.h5'
     model = tf.keras.models.load_model(model_path, compile=False)
     last_conv_layer_name = 'conv_pw_13'
 
