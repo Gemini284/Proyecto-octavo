@@ -32,7 +32,7 @@ def make_gradcam_heatmap(img_array, model, last_conv_layer_name):
     heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
     return heatmap.numpy(), float(pred_index)
 
-def save_and_display_gradcam(img_path, heatmap, cam_path, prediction, alpha=0.4):
+def save_and_display_gradcam(img_path, heatmap, gradcam_result_path, prediction, alpha=0.4):
     """Superimposes the heatmap on the original image and saves it"""
     img = cv2.imread(img_path)
     heatmap = cv2.resize(heatmap, (img.shape[1], img.shape[0]))
@@ -45,19 +45,19 @@ def save_and_display_gradcam(img_path, heatmap, cam_path, prediction, alpha=0.4)
     label = f'Predicted Rating: {prediction:.2f}'
     cv2.putText(superimposed_img, label, (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    cv2.imwrite(cam_path, superimposed_img)
+    cv2.imwrite(gradcam_result_path, superimposed_img)
     return superimposed_img
 
-def main(img_path):
-    model_path = 'C:\\Users\\vicen\\source\\repos\\Proyecto-octavo\\Backend\\src\\scripts\\pretrained_model.h5'
+def main(model_path, img_path, gradcam_result_path):
+    #model_path = 'pretrained_model.h5'
     model = tf.keras.models.load_model(model_path, compile=False)
     last_conv_layer_name = 'conv_pw_13'
 
     img_array = get_img_array(img_path, (192, 256))
     heatmap, prediction = make_gradcam_heatmap(img_array, model, last_conv_layer_name)
 
-    cam_path = 'C:\\Users\\vicen\\source\\repos\\Proyecto-octavo\\Backend\\src\\temp\\gradcam_result.png'
-    superimposed_img = save_and_display_gradcam(img_path, heatmap, cam_path, prediction)
+    #cam_path = 'gradcam_result.png'
+    superimposed_img = save_and_display_gradcam(img_path, heatmap, gradcam_result_path, prediction)
 
     # Display the image
     superimposed_img = cv2.cvtColor(superimposed_img, cv2.COLOR_BGR2RGB)  # Convert BGR to RGB  
@@ -65,7 +65,7 @@ def main(img_path):
     return superimposed_img, prediction # Return the superimposed image as a numpy array and the prediction as a float
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print("Usage: python gradcam.py <path_to_image>")
+    if len(sys.argv) != 4:
+        print("Usage: python gradcam.py <model_path> <img_path> <gradcam_result_path>")
     else:
-        main(sys.argv[1])
+        main(sys.argv[1], sys.argv[2], sys.argv[3])
