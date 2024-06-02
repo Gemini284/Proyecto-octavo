@@ -23,8 +23,8 @@ class AnalizeCtrl {
             const { url } = page;
             const screenshot: Buffer = await this.screenshotService.screenshot(url);
 
-            const SCRIPT_PATH: string = path.resolve(__dirname, "../../scripts/test.py");
-            const PYTHON_PROCESS = spawn("python3", [SCRIPT_PATH, "ElPepe", "666", "--ciudad", "Tepic"]);
+            const SCRIPT_PATH: string = path.resolve(__dirname, "../../scripts/gradcam.py");
+            const PYTHON_PROCESS = spawn("python3", [SCRIPT_PATH, ""]);
 
             const responseBuff: Buffer[] = [];
             const bufferDataPromise: Promise<Buffer> = new Promise<Buffer>((resolve, reject) => {
@@ -35,7 +35,6 @@ class AnalizeCtrl {
                 PYTHON_PROCESS.stdout.on("end", () => {
                     const RESULT_PNG: Buffer = Buffer.concat(responseBuff);
                     console.log("Buffer Lenght: ", RESULT_PNG.length);
-                    // res.contentType("image/png");
                     resolve(RESULT_PNG);
                 });
 
@@ -45,7 +44,7 @@ class AnalizeCtrl {
             });
 
             const bufferData: Buffer = await bufferDataPromise;
-            //res.contentType("text");
+            res.contentType("image/png");
             res.send(bufferData);
         }catch(error){
             console.error("Error in AnalizeCtrl: ", error);
